@@ -1,1 +1,17 @@
-<h3 class="mt-4 mb-4 {{value.size}} blog-heading">{{ value.heading|safe }}</h3>
+{% load fix_block_displays %}
+{% load wagtailcore_tags %}
+
+{% comment %}
+Heading blocks in streamfields were previously saved with their `size` as the tailwind css classes needed for desired
+styling appearance, which caused them to all render as h3 tags. This has been updated, but previously saved
+headings values will not automatically update to the new size choices in ChoiceField.
+
+The heading_size_to_tag fixes this issue by checking if the value saved for the block's size is
+one of the tailwind css helper classes. This filter can be removed once all heading are saved with the proper
+heading tag as their `size` value.
+
+The get_css_class filter is used to add tailwind css classes to the heading tag and should be kept.
+{% endcomment %}
+
+
+<{{ value.size|heading_size_to_tag }} class="mt-4 mb-4 blog-heading {{value.size|heading_size_to_tag|get_css_class}}">{{ value.heading|safe }}</{{ value.size|heading_size_to_tag }}>
